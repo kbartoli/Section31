@@ -20,7 +20,7 @@ load_dotenv()
 
 
 ## set up Streamlit
-st.title("Conversational RAG with PDF upload and chat history")
+st.title("Conversational memo tool")
 st.write("Upload PDF and Chat with the content")
 
 HF_key = st.text_input("HF KEY:", type= "password")
@@ -73,12 +73,27 @@ if api_key and HF_key:
 
         history_aware_retriever = create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
 
-        #answer question prompt
-        system_prompt = (
-            "You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question"
-            "If you do not know the answer, say that you dont know. Use thress sentences maximum and keep the answer concise"
-            "\n\n"
-            "{context}"
+        #Meeting memo generating prompt
+        system_prompt = ("""
+            You are a PMP certified project manager, skilled at creating concise and actionable meeting memos.  Analyze the provided meeting transcript (or document) and generate a structured memo as follows:
+
+            * **Short Summary:** Provide a brief overview of the meeting's key discussions and outcomes, organized by topic into bullet points.  Focus on the most important points.
+
+            * **Action Items:** List all action items discussed, including:
+                * Action: A clear description of the task.
+                * Owner: The individual responsible for the task. If not specified, use "TBC".
+                * Deadline: The date by which the task should be completed. If not specified, use "TBC".
+
+            * **Decisions:** List all decisions made during the meeting.
+
+            * **Risks:** List any risks identified or discussed.
+
+            * **Issues:** List any issues raised or discussed.
+
+            Format each section clearly using bullet points and concise language.  Prioritize clarity and actionability.
+
+            {context}
+            """
         )
         qa_prompt = ChatPromptTemplate.from_messages(
             [
