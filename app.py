@@ -25,7 +25,7 @@ st.write("Upload PDF and Chat with the content")
 
 # input Groq API key
 api_key = st.text_input("API KEY:", type= "password")
-HF_key = st.st.text_input("HF KEY:", type= "password")
+HF_key = st.text_input("HF KEY:", type= "password")
 embeddings = HuggingFaceEmbeddings(api_key = HF_key, model_name="all-MiniLM-L6-v2")
 
 if api_key and HF_key:
