@@ -15,8 +15,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-os.environ["HF_API"]=os.getenv("HF_API")
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+#os.environ["HF_API"]=os.getenv("HF_API")
+
 
 
 ## set up Streamlit
@@ -25,8 +25,10 @@ st.write("Upload PDF and Chat with the content")
 
 # input Groq API key
 api_key = st.text_input("API KEY:", type= "password")
+HF_key = st.st.text_input("HF KEY:", type= "password")
+embeddings = HuggingFaceEmbeddings(api_key = HF_key, model_name="all-MiniLM-L6-v2")
 
-if api_key:
+if api_key and HF_key:
     llm=ChatGroq(groq_api_key=api_key, model_name="gemma2-9b-it")
     #chat interface
     session_id = st.text_input("session ID", value = "defaul_session")
