@@ -23,11 +23,12 @@ load_dotenv()
 st.title("Conversational RAG with PDF upload and chat history")
 st.write("Upload PDF and Chat with the content")
 
+HF_key = st.text_input("HF KEY:", type= "password")
+if HF_key:
+    os.environ["HUGGINGFACEHUB_API_TOKEN"] = HF_key
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 # input Groq API key
 api_key = st.text_input("API KEY:", type= "password")
-HF_key = st.text_input("HF KEY:", type= "password")
-embeddings = HuggingFaceEmbeddings(api_key = HF_key, model_name="all-MiniLM-L6-v2")
-
 if api_key and HF_key:
     llm=ChatGroq(groq_api_key=api_key, model_name="gemma2-9b-it")
     #chat interface
